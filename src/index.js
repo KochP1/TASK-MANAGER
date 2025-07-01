@@ -1,12 +1,14 @@
 const express = require('express');
+const authRouter = require('./routers/authRouter');
 
 const app = express();
-const port= 3000;
+app.use(express.json()); // Para parsear JSON en las requests
 
-app.get('/', (req, res) => {
-    res.send('Hello world');
-})
+// Rutas públicas
+app.use('/auth', authRouter);
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-})
+// Ruta protegida (ejemplo)
+
+app.listen(3000, () => {
+    console.log('Servidor en http://localhost:3000');
+});
