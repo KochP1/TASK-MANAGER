@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/KochP1/TASK-MANAGER#readme",
   "dependencies": {
+    "dotenv": "^17.0.1",
     "express": "^5.1.0"
   }
 }
