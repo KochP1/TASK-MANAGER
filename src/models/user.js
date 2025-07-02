@@ -9,16 +9,16 @@ const User = sequelize.define('User', {
         autoIncrement: true
     },
     name: {
-        type: DataTypes.STRING(50), // ← Coincide con varchar(50)
+        type: DataTypes.STRING(50),
         allowNull: false,
     },
     lastName: {
-        type: DataTypes.STRING(20), // ← Coincide con varchar(20)
+        type: DataTypes.STRING(20),
         field: 'lastName',
         allowNull: false
     },
     email: {
-        type: DataTypes.STRING(100), // ← Coincide con varchar(100)
+        type: DataTypes.STRING(100),
         allowNull: false,
         unique: true,
         validate: {
@@ -26,7 +26,7 @@ const User = sequelize.define('User', {
         }
     },
     password: {
-        type: DataTypes.STRING(100), // ← Coincide con varchar(100)
+        type: DataTypes.STRING(100),
         allowNull: false
     },
     role: {
@@ -34,7 +34,7 @@ const User = sequelize.define('User', {
         allowNull: false,
         defaultValue: 'user'
     },
-    createdAt: {  // ← Mapea created_at
+    createdAt: {
         type: DataTypes.DATE,
         field: 'created_at',
         allowNull: true,
@@ -42,8 +42,8 @@ const User = sequelize.define('User', {
     }
 }, {
     tableName: 'users',
-    timestamps: false, // ← Desactiva los timestamps automáticos
-    underscored: false // ← Opcional: convierte camelCase a snake_case
+    timestamps: false,
+    underscored: false
 });
 
 // Encriptar contraseña antes de guardar
