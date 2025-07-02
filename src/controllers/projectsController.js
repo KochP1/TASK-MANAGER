@@ -14,6 +14,25 @@ const createProject = async (req, res) => {
     }
 }
 
+// DELETE project
+
+const deleteProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const project = await Project.findByPk(id)
+
+        if (!project) {
+            return res.status(404).json({ error: 'Proyecto no encontrado' });
+        }
+
+        await project.destroy();
+        res.status(200).json({message: 'Proyecto eliminado'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al eliminar proyecto'});
+    }
+}
+
 
 // POST TASK
 
@@ -29,4 +48,20 @@ const createTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask }
+const deleteTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const task = await Task.findByPk(id);
+
+        if (!task) {
+            res.status(400).json({error: 'Tarea no encontrada'});
+        }
+        await task.destroy();
+        res.status(200).json({message: 'Tarea eliminada'})
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al eliminar tarea'});
+    }
+}
+
+module.exports = { createProject, createTask, deleteProject, deleteTask }
