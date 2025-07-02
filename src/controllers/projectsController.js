@@ -20,8 +20,8 @@ const createProject = async (req, res) => {
 const createTask = async (req, res) => {
     
     try {
-        const { title, description, user_id, project_id, due_date } = req.body;
-        const task = await Task.create({ title, description, user_id, project_id, due_date });
+        const { title, description, status, user_id, project_id, due_date } = req.body;
+        const task = await Task.create({ title, description, status, user_id, project_id, due_date });
         res.status(200).json({message: 'Tarea creada', tarea: task.id});
     } catch (err) {
         console.error(err);
