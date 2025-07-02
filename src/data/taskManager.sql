@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 01-07-2025 a las 23:20:26
+-- Tiempo de generación: 02-07-2025 a las 17:29:32
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -22,6 +22,19 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `task_manager` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `task_manager`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `blacklisted_tokens`
+--
+
+CREATE TABLE `blacklisted_tokens` (
+  `token` varchar(500) NOT NULL,
+  `type` enum('access','refresh') NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -63,6 +76,7 @@ CREATE TABLE `tasks` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `lastName` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `role` enum('admin','user') NOT NULL DEFAULT 'user',
@@ -86,19 +100,26 @@ CREATE TABLE `user_projects` (
 --
 
 --
+-- Indices de la tabla `blacklisted_tokens`
+--
+ALTER TABLE `blacklisted_tokens`
+  ADD PRIMARY KEY (`token`),
+  ADD KEY `blacklisted_tokens_ibfk_1` (`user_id`);
+
+--
 -- Indices de la tabla `projects`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `admin_id` (`admin_id`);
+  ADD KEY `projects_ibfk_1` (`admin_id`);
 
 --
 -- Indices de la tabla `tasks`
 --
 ALTER TABLE `tasks`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `project_id` (`project_id`);
+  ADD KEY `tasks_ibfk_1` (`user_id`),
+  ADD KEY `tasks_ibfk_2` (`project_id`);
 
 --
 -- Indices de la tabla `users`
@@ -112,7 +133,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `user_projects`
   ADD PRIMARY KEY (`user_id`,`project_id`),
-  ADD KEY `project_id` (`project_id`);
+  ADD KEY `user_projects_ibfk_2` (`project_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -141,24 +162,30 @@ ALTER TABLE `users`
 --
 
 --
+-- Filtros para la tabla `blacklisted_tokens`
+--
+ALTER TABLE `blacklisted_tokens`
+  ADD CONSTRAINT `blacklisted_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `projects`
 --
 ALTER TABLE `projects`
-  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tasks`
 --
 ALTER TABLE `tasks`
-  ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `user_projects`
 --
 ALTER TABLE `user_projects`
-  ADD CONSTRAINT `user_projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `user_projects_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `user_projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_projects_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
