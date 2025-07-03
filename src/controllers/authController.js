@@ -10,12 +10,11 @@ const authService = new AuthService();
 
 const register = async (req, res) => {
     try {
-        const {name, lastName, email, password, role} = req.body
-        const user = await User.create({name, lastName, email, password, role})
+        const user = authService.create(req.body.name, req.body.lastName, req.body.email, req.body.password, req.body.role)
         res.status(201).json({message: 'Usuario registrado', usuarioId: user.id})
     } catch (err) {
         console.error('Error detallado:', err);
-        res.status(400).json({
+        res.status(500).json({
             error: 'Error al registrar usuario'
         })
     }

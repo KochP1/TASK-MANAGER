@@ -1,6 +1,20 @@
 const User = require('../models/user')
 
 class AuthService {
+    async create(name, lastName, email, password, role) {
+        if (!name || !lastName || !email || !password || !role) {
+            throw new Error('Faltan campos');
+        }
+
+        return await User.create({
+            name,
+            lastName,
+            email,
+            password,
+            role
+        })
+    }
+
     async listUsers() {
         return await User.findAll();
     }
