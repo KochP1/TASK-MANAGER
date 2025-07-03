@@ -5,6 +5,7 @@ const User = require('../models/user')
 const Token = require('../models/token')
 
 // REGISTER
+
 const register = async (req, res) => {
     try {
         const {name, lastName, email, password, role} = req.body
@@ -20,7 +21,6 @@ const register = async (req, res) => {
 
 // LOGIN
 
-// Login
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -42,6 +42,7 @@ const login = async (req, res) => {
     }
 };
 
+// LOGOUT
 const logout = async (req, res) => {
     try {
         const authHeader = req.header('Authorization');
