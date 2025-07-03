@@ -68,4 +68,10 @@ const logout = async (req, res) => {
     }
 };
 
+// DELETE user
+
+const delete_user = async (req, res) => {
+
+}
+
 module.exports = { register, login, logout };
