@@ -1,6 +1,14 @@
 const User = require('../models/user')
 
 class AuthService {
+    async listUsers() {
+        return await User.findAll();
+    }
+
+    async getUser(id) {
+        const user = await User.findByPk(id);
+        return user;
+    }
     async update(id, updates) {
         const user = await User.findByPk(id);
         return await user.update(updates)

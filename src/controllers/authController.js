@@ -70,6 +70,40 @@ const logout = async (req, res) => {
     }
 };
 
+// GET user
+
+const list_users = async (req, res) => {
+    try {
+        const users = await authService.listUsers();
+        if (!users) {
+            return res.status(404).json({error: 'No se encontraron usuarios'});
+        }
+
+        return res.json(users)
+
+    } catch(err) {
+        console.error(err);
+        return res.status(500).json({error: 'Error al obtener usuarios'});
+    }
+}
+
+const get_user_by_id = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await authService.getUser(id)
+
+        if (!user) {
+            return res.status(404).json({error: 'No se encontraron el usuario'});
+        }
+
+        return res.json(user)
+
+    } catch(err) {
+        console.error(err);
+        return res.status(500).json({error: 'Error al obtener usuarios'});
+    }
+}
+
 // PUT user
 
 const update_user = async (req, res) => {
@@ -97,4 +131,4 @@ const delete_user = async (req, res) => {
     }
 }
 
-module.exports = { register, login, logout, delete_user, update_user };
+module.exports = { register, login, logout, delete_user, update_user, list_users, get_user_by_id };
