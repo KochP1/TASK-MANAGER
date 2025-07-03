@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN } = require('../config/jwt');
 const User = require('../models/user')
 const Token = require('../models/token')
+const AuthService = require('../services/authService');
+const authService = new AuthService();
 
 // REGISTER
 
@@ -68,10 +70,31 @@ const logout = async (req, res) => {
     }
 };
 
+// PUT user
+
+const update_user = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const user = await authService.update(id, req.body)
+        res.status(200).json({message: 'Usuario editado', userId: user.id})
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al editar usuario'})
+    }
+}
+
 // DELETE user
 
 const delete_user = async (req, res) => {
-
+    try {
+        const { id } = req.params;
+        await authService.delete(id);
+        return res.status(200).json({message: 'Usuario eliminado'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al eliminar usuario'})
+    }
 }
 
-module.exports = { register, login, logout };
+module.exports = { register, login, logout, delete_user, update_user };
