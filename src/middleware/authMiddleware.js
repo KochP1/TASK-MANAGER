@@ -1,5 +1,5 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { ACCESS_TOKEN_SECRET } = require('../config/jwt');
 const Token = require('../models/token')
 
 const authenticate = async (req, res, next) => {
@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
         return res.status(401).json({ error: 'Token inválido (sesión cerrada)' });
         }
 
-        const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         req.userId = decoded.userId;
         next();
     } catch (err) {

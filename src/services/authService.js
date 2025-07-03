@@ -24,6 +24,10 @@ class AuthService {
         return user;
     }
     async update(id, updates) {
+        if (updates.password) {
+        throw new Error('Password updates not allowed here');
+        }
+        
         const user = await User.findByPk(id);
         return await user.update(updates)
     }
