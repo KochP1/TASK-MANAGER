@@ -24,6 +24,11 @@ class TaskService {
         return await task.update(updates);
     }
 
+    async updateProgress(id, newProgress) {
+        const task = await Task.findByPk(id);
+        return await task.update(newProgress)
+    }
+
     async delete(id) {
         const task = await this.getById(id);
         await task.destroy();

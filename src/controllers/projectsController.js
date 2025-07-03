@@ -136,6 +136,19 @@ const editTask = async (req, res) => {
     }
 }
 
+const editTaskProgress = async (req, res) => {
+    try {
+        const task = await taskService.updateProgress(
+            req.params.id,
+            req.body
+        );
+        res.json({message: 'Tarea actualizado', taskId: task.id});
+    } catch (err) {
+        console.error(err)
+        res.status(err.message.includes('no encontrado') ? 404 : 400).json({ error: err.message });
+    }
+}
+
 // DELETE task
 
 const deleteTask = async (req, res) => {
@@ -150,4 +163,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject}
+module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress}
