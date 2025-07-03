@@ -33,7 +33,13 @@ class ProjectService {
     async getAllByAdmin(adminId) {
         return await Project.findAll({ 
             where: { admin_id: adminId },
-            order: [['createdAt', 'DESC']]
+            order: [['created_at', 'DESC']]
+        });
+    }
+
+    async getByAdmin(adminId, projectName) {
+        return await Project.findOne({ 
+            where: { admin_id: adminId, name: projectName},
         });
     }
 }

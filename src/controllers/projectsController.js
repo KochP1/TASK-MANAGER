@@ -4,6 +4,44 @@ const projectService = new ProjectService();
 const TaskService = require('../services/taskService');
 const taskService = new TaskService();
 
+// GET project => id
+
+const getProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const projects = await projectService.getAllByAdmin(id)
+
+        if (!projects) {
+            res.status(404).json({error: 'El proyecto no existe'});
+        }
+
+        res.status(200).json(projects);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al buscar proyecto'});
+    }
+}
+
+const getOneProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name} = req.body;
+
+        const project = await projectService.getByAdmin(id, name);
+
+        if (!project) {
+            res.status(404).json({error: 'El proyecto no existe'});
+        }
+
+        res.json(project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al buscar proyecto'});
+
+    }
+}
+
 // POST project
 
 const createProject = async (req, res) => {
@@ -94,4 +132,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask }
+module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject }

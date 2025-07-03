@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createProject, createTask, deleteProject, deleteTask, editProject, editTask } = require('../controllers/projectsController');
+const { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject } = require('../controllers/projectsController');
 const authenticate = require('../middleware/authMiddleware')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
 // projects
+router.get('/get_project/:id', authenticate, checkRole('admin'), getProject)
+router.get('/get_especific_project/:id', authenticate, checkRole('admin'), getOneProject)
 router.post('/create_project', authenticate, checkRole('admin') , createProject);
 router.put('/edit_project/:id', authenticate, checkRole('admin') , editProject);
 router.delete('/delete_project/:id', authenticate, checkRole('admin') , deleteProject);

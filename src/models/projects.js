@@ -18,6 +18,12 @@ const Project = sequelize.define('Project', {
     admin_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+        allowNull: true,
+        defaultValue: DataTypes.NOW
     }
 }, {
     tableName: 'projects',
