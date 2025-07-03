@@ -1,57 +1,43 @@
-const Project = require('../models/projects')
 const Task = require('../models/tasks');
+const ProjectService = require('../services/projectService');
+const projectService = new ProjectService();
 
 // POST project
 
 const createProject = async (req, res) => {
     try {
-        const { name, description, admin_id} = req.body;
-        const project = await Project.create({ name, description, admin_id})
-        res.status(200).json({message: 'Proyecto creado', proyecto_id: project.id})
-    } catch(err) {
-        console.error(err);
-        res.status(400).json({error: 'Error al crear proyecto'})
+        const project = await projectService.create(
+            req.body.name, 
+            req.body.description, 
+            req.body.admin_id
+        );
+        res.status(201).json({message: 'Proyecto creado', projectId: project.id});
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-}
+};
 
 // PUT project
 
 const editProject = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { name, description, admin_id} = req.body;
-
-        if (!name || !description || !admin_id) {
-            res.status(400).json({error: 'Faltan campos'});
-        }
-
-        const project = await Project.findByPk(id);
-
-        if (!project) {
-            res.status(404).json({error: 'Proyecto no encontrado'});
-        }
-
-        project.update({name: name, description: description, admin_id: admin_id});
-        res.status(200).json({message: 'Proyecto editado', proyectoId: project.id});
-
+        const project = await projectService.update(
+            req.params.id,
+            req.body
+        );
+        res.json({message: 'Proyecto actualizado', projectId: project.id});
     } catch (err) {
-        console.error(err);
-        res.status(500).json({error: 'Error editando proyecto'});
+        res.status(err.message.includes('no encontrad') ? 404 : 400).json({ error: err.message });
     }
-}
+};
 
 // DELETE project
 
 const deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
-        const project = await Project.findByPk(id)
-
-        if (!project) {
-            return res.status(404).json({ error: 'Proyecto no encontrado' });
-        }
-
-        await project.destroy();
+        
+        await projectService.delete(id);
         res.status(200).json({message: 'Proyecto eliminado'});
     } catch (err) {
         console.error(err);

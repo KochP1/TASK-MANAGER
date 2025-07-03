@@ -4,12 +4,12 @@ const adminRouter = require('./routers/adminRouter');
 const authenticate = require('./middleware/authMiddleware');
 
 const app = express();
-app.use(express.json()); // Para parsear JSON en las requests
+app.use(express.json());
 
 // Rutas públicas
 app.use('/auth', authRouter);
 
-// Ruta protegida (ejemplo)
+// Ruta protegida
 app.use('/admin', authenticate, adminRouter);
 
 app.listen(3000, () => {
