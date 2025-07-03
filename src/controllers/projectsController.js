@@ -1,6 +1,8 @@
-const Task = require('../models/tasks');
 const ProjectService = require('../services/projectService');
 const projectService = new ProjectService();
+
+const TaskService = require('../services/taskService');
+const taskService = new TaskService();
 
 // POST project
 
@@ -51,12 +53,16 @@ const deleteProject = async (req, res) => {
 const createTask = async (req, res) => {
     
     try {
-        const { title, description, status, user_id, project_id, due_date } = req.body;
-        const task = await Task.create({ title, description, status, user_id, project_id, due_date });
-        res.status(200).json({message: 'Tarea creada', tarea: task.id});
+        const task = await taskService.create(
+            req.body.title, 
+            req.body.description, 
+            req.body.user_id,
+            req.body.project_id,
+            req.body.due_date
+        );
+        res.status(201).json({message: 'Tarea creado', taskId: task.id});
     } catch (err) {
-        console.error(err);
-        res.status(400).json({error: 'Error al crear tarea'});
+        res.status(400).json({ error: err.message });
     }
 }
 
@@ -64,20 +70,13 @@ const createTask = async (req, res) => {
 
 const editTask = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { title, description, status, user_id, project_id, due_date } = req.body;
-        
-        const task = await Task.findByPk(id);
-
-        if (!task) {
-            res.status(404).json({error: 'Tarea no encontrada'});
-        }
-
-        await task.update({title: title, description: description, status: status, user_id: user_id, project_id: project_id, due_date: due_date})
-        res.status(200).json({message: 'Tarea actualizada'});
+        const task = await taskService.update(
+            req.params.id,
+            req.body
+        );
+        res.json({message: 'Tarea actualizado', taskId: task.id});
     } catch (err) {
-        console.error(err);
-        res.status(500).json({error: 'Error al editar la tarea'});
+        res.status(err.message.includes('no encontrado') ? 404 : 400).json({ error: err.message });
     }
 }
 
@@ -86,14 +85,10 @@ const editTask = async (req, res) => {
 const deleteTask = async (req, res) => {
     try {
         const { id } = req.params;
-        const task = await Task.findByPk(id);
-
-        if (!task) {
-            res.status(400).json({error: 'Tarea no encontrada'});
-        }
-        await task.destroy();
-        res.status(200).json({message: 'Tarea eliminada'})
-    } catch(err) {
+        
+        await taskService.delete(id);
+        res.status(200).json({message: 'Tarea eliminado'});
+    } catch (err) {
         console.error(err);
         res.status(500).json({error: 'Error al eliminar tarea'});
     }
