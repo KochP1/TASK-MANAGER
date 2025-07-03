@@ -35,6 +35,13 @@ class TaskService {
         if (!task) throw new Error('Proyecto no econtrado')
         return task;
     }
+
+    async getAllByProject(project_id, user) {
+        return await Task.findAll({
+            where: {project_id: project_id, user_id: user},
+            order: [['due_date', 'DESC']]
+        });
+    }
 }
 
 module.exports = TaskService;
