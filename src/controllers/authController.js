@@ -117,6 +117,19 @@ const update_user = async (req, res) => {
     }
 }
 
+const update_password = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const user = await authService.updatePassword(id, req.body.currentPassword, req.body.newPassword)
+        res.status(200).json({message: 'Contraseña editado', userId: user.id})
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al editar contraseña'})
+    }
+}
+
 // DELETE user
 
 const delete_user = async (req, res) => {
@@ -130,4 +143,4 @@ const delete_user = async (req, res) => {
     }
 }
 
-module.exports = { register, login, logout, delete_user, update_user, list_users, get_user_by_id };
+module.exports = { register, login, logout, delete_user, update_user, list_users, get_user_by_id, update_password };
