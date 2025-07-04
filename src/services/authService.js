@@ -95,6 +95,23 @@ class AuthService {
         return accessToken
     }
 
+    async createRefreshToken(id) {
+        const refreshToken = jwt.sign({ userId: id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
+        return refreshToken;
+    }
+
+    async login(email, password) {
+        const user = await User.findOne({ where: { email } });
+        if (!user) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new Error ('Credenciales invalidas');
+        }
+
+        return user;
+    }
+
 
     async refreshToken(refreshToken) {
         try {

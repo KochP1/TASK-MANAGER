@@ -26,14 +26,15 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ where: { email } });
-        if (!user) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) return res.status(401).json({ error: 'Credenciales inválidas' });
+        if (!email || !password) {
+            return res.status(400).json({error: 'Faltan campos'})
+        }
 
-        const accessToken = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
-        const refreshToken = jwt.sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
+        const user = await authService.login(email, password)
+
+        const accessToken = await authService.createJwt(user.id)
+        const refreshToken = await authService.createRefreshToken(user.id);
 
         await authService.saveRefreshToken(user.id, refreshToken);
 
