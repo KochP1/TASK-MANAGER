@@ -2,10 +2,14 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
 const UserProjects = sequelize.define('UserProjects', {
-    user_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: false
+        autoIncrement: true
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     project_id: {
         type: DataTypes.INTEGER,
@@ -13,14 +17,13 @@ const UserProjects = sequelize.define('UserProjects', {
     },
     assigned_at: {
         type: DataTypes.DATE,
-        field: 'created_at',
         allowNull: true,
         defaultValue: DataTypes.NOW
     }
 }, {
-    tableName: 'user-projects',
+    tableName: 'user_projects',
     timestamps: false,
     underscored: false
 })
 
-module.export = UserProjects
+module.exports = UserProjects

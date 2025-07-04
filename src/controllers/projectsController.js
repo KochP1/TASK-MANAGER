@@ -85,6 +85,33 @@ const deleteProject = async (req, res) => {
     }
 }
 
+// POST user-project
+
+const assign_project = async (req, res) => {
+    try {
+        const { user_id, project_id } = req.params;
+        
+        const assign = await projectService.assignProject(user_id, project_id);
+        res.status(200).json({message: 'Proyecto asignado', user: assign.user_id})
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al asignar proyecto'});
+    }
+}
+
+// PUT user-project
+
+const update_assign_project = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const assign = await projectService.updateAssignProject(id, req.body);
+        res.status(200).json({message: 'Asignacion de proyecto modificado'})
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al modificar asignar proyecto'});
+    }
+}
+
 // GET TASK
 
 const getTasksByProject = async (req, res) => {
@@ -163,4 +190,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress}
+module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress, assign_project, update_assign_project}

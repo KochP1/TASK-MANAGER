@@ -1,4 +1,5 @@
 const Project = require('../models/projects');
+const UserProjects = require('../models/user-projects');
 
 class ProjectService {
     async create(name, description, adminId) {
@@ -22,6 +23,24 @@ class ProjectService {
         const project = await this.getById(id);
         await project.destroy();
         return { message: 'Proyecto eliminado' };
+    }
+
+    async assignProject(user_id, project_id) {
+        if (!user_id || !project_id) {
+            throw new Error('Faltan campos');
+        }
+
+        return await UserProjects.create({
+            user_id,
+            project_id
+        });
+    }
+
+    async updateAssignProject(id, updates) {
+
+        const assign = await UserProjects.findByPk(id);
+
+        return await assign.update(updates);
     }
 
     async getById(id) {
