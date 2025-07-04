@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
     }
 
     try {
-        // Verificar si el token está en la lista negra
+
         const isBlacklisted = await Token.findOne({ where: { token } });
         if (isBlacklisted) {
         return res.status(401).json({ error: 'Token inválido (sesión cerrada)' });

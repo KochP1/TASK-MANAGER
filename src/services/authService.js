@@ -1,5 +1,7 @@
 const User = require('../models/user');
+const Token = require('../models/token')
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 class AuthService {
     async create(name, lastName, email, password, role) {
@@ -68,6 +70,59 @@ class AuthService {
     async delete(id) {
         const user = await User.findByPk(id);
         return user.destroy();
+    }
+
+    async saveRefreshToken (userId, token) {
+        await Token.create({
+            token: token,
+            type: 'refresh',
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            user_id: userId,
+        });
+    };
+
+    async saveJwtToken (token, time) {
+        await Token.create({
+            token: token,
+            type: 'access',
+            expiresAt: new Date(time * 1000)
+        });
+    };
+
+    async createJwt(id) {
+        const accessToken = jwt.sign({ userId: id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+        return accessToken
+    }
+
+
+    async refreshToken(refreshToken) {
+        try {
+            const verify = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            const tokenValido = await Token.findOne({
+                where: {
+                    token: refreshToken.trim(),
+                    expiresAt: { [Op.gt]: new Date() },
+                    user_id: verify.userId,
+                }
+            });
+
+            if (!tokenValido) throw new Error('Refresh token inválido');
+
+            return createJwt(verify.userId);
+        } catch (error) {
+            throw new Error('Token de refresco inválido');
+        }
+    }
+
+    async logout(token) {
+            
+        if (!token) {
+            throw new Error('Token no encontrado')
+        }
+
+        const decoded = jwt.decode(token);
+            
+        return await this.saveJwtToken(token, decoded.exp)
     }
 }
 

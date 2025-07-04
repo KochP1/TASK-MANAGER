@@ -32,14 +32,33 @@ const login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-        // Generar tokens
         const accessToken = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
         const refreshToken = jwt.sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
+
+        await authService.saveRefreshToken(user.id, refreshToken);
+
 
         res.json({ accessToken, refreshToken });
     } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Error en el servidor' });
+    }
+};
+
+const refreshAccessToken = async (req, res) => {
+    try {
+        const { refresh } = req.body;
+        
+        if (!refresh) {
+            return res.status(400).json({ error: 'Refresh token requerido' });
+        }
+
+        const token = await authService.refreshToken(refresh);
+        res.json({ jwt: token });
+
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ error: 'Token inválido' });
     }
 };
 
@@ -53,16 +72,7 @@ const logout = async (req, res) => {
         return res.status(400).json({ error: 'Token no proporcionado' });
         }
 
-
-        const decoded = jwt.decode(token);
-        
-
-        await Token.create({
-        token,
-        type: 'access',
-        expiresAt: new Date(decoded.exp * 1000) // Convertir timestamp a Date
-        });
-
+        await authService.logout(token)
         res.json({ message: 'Sesión cerrada exitosamente' });
     } catch (err) {
         res.status(500).json({ error: 'Error al cerrar sesión', details: err.message });
@@ -143,4 +153,4 @@ const delete_user = async (req, res) => {
     }
 }
 
-module.exports = { register, login, logout, delete_user, update_user, list_users, get_user_by_id, update_password };
+module.exports = { register, login, logout, delete_user, update_user, list_users, get_user_by_id, update_password, refreshAccessToken };

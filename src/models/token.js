@@ -14,7 +14,13 @@ const Token = sequelize.define('Token', {
     expiresAt: {
         type: DataTypes.DATE,
         allowNull: false
+    },
+    
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
+    
     }, {
     tableName: 'blacklisted_tokens',
     timestamps: false,
