@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Token = require('../models/token')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 
 class AuthService {
     async create(name, lastName, email, password, role) {
@@ -108,9 +109,10 @@ class AuthService {
 
             if (!tokenValido) throw new Error('Refresh token inválido');
 
-            return createJwt(verify.userId);
+            return this.createJwt(verify.userId);
         } catch (error) {
-            throw new Error('Token de refresco inválido');
+            console.error(error)
+            throw new Error('Token inválido');
         }
     }
 
