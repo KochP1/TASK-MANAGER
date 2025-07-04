@@ -1,18 +1,18 @@
-require('dotenv').config(); // Carga las variables de .env
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME,     // Nombre de la BD
-    process.env.DB_USER,     // Usuario
-    process.env.DB_PASSWORD, // Contraseña
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
         dialect: 'mysql',
-        logging: false, // Para no ver mensajes SQL en consola
+        logging: false,
     }
 );
 
-// Verificar conexión
+
 sequelize.authenticate()
     .then(() => console.log('Conexión a BD exitosa'))
     .catch(err => console.error('Error de conexión a BD:', err));
