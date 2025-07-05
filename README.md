@@ -23,7 +23,7 @@ Arquitectura MVC
 Base de datos MySql
 ## Estructura del proyecto
 
-![App Screenshot](https://drive.google.com/file/d/12CPGX0Ud6tD02ICscXfMgcAfVOm1mzOU/view?usp=sharing)
+<img width="862" height="780" alt="Image" src="https://github.com/user-attachments/assets/ac614798-8f9e-4cfd-bd38-d40d82fbc11a" />
 
 
 ## Instalación
