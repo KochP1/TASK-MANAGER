@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 02-07-2025 a las 17:29:32
+-- Tiempo de generación: 05-07-2025 a las 03:16:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -90,6 +90,7 @@ CREATE TABLE `users` (
 --
 
 CREATE TABLE `user_projects` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
   `assigned_at` datetime DEFAULT current_timestamp()
@@ -132,8 +133,9 @@ ALTER TABLE `users`
 -- Indices de la tabla `user_projects`
 --
 ALTER TABLE `user_projects`
-  ADD PRIMARY KEY (`user_id`,`project_id`),
-  ADD KEY `user_projects_ibfk_2` (`project_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_assign_fk` (`user_id`),
+  ADD KEY `project_assign_fk` (`project_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -155,6 +157,12 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `user_projects`
+--
+ALTER TABLE `user_projects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -184,8 +192,8 @@ ALTER TABLE `tasks`
 -- Filtros para la tabla `user_projects`
 --
 ALTER TABLE `user_projects`
-  ADD CONSTRAINT `user_projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_projects_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `project_assign_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_assign_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
