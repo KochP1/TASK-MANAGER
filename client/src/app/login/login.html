@@ -1,0 +1,21 @@
+<div class="login-form__container">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <img src="planning.png" alt="Task-Manager" class="logo">
+        <div>
+            <label>Email:</label>
+            <input type="email" formControlName="email">
+            <div *ngIf="loginForm.get('email')?.hasError('email')">
+            Email no válido.
+            </div>
+        </div>
+
+        <div>
+            <label>Contraseña:</label>
+            <input type="password" formControlName="password">
+        </div>
+
+        <button type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
+    </form>
+</div>
+
