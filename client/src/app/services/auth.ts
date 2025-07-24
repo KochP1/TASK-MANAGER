@@ -11,7 +11,7 @@ interface User {
 }
 
 interface AuthResponse {
-  token?: string;
+  accessToken?: string;
   user?: User;
 }
 
@@ -38,15 +38,19 @@ export class Auth {
   }
 
   login(credentials: {email:string, password: string}): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => this.handleAuth(response)),
       catchError(this.handleError)
     )
   }
 
   private handleAuth(response: AuthResponse): void {
-    if (response.token) {
-      localStorage.setItem(this.tokenKey, response.token);
+    if (response.accessToken) {
+      localStorage.setItem(this.tokenKey, response.accessToken);
+    }
+
+    if (response.user) {
+      localStorage.setItem('user', JSON.stringify(response.user))
     }
   }
 

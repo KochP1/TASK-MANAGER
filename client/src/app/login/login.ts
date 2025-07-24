@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
-const url = `http://localhost:3000/auth/login`;
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +11,10 @@ const url = `http://localhost:3000/auth/login`;
 })
 export class Login {
   loginForm: FormGroup;
+  isLoading = false;
+  errorMessage: string | null = null;
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -22,7 +23,22 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      
+      this.isLoading = true;
+      this.errorMessage = null;
+
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Error al iniciar sesion';
+          this.isLoading = false
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      })
     }
   }
 }
