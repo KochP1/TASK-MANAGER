@@ -1,0 +1,31 @@
+<div class="login-form__container">
+    <form class="login-form" [formGroup]="registForm" (ngSubmit)="onSubmit()">
+
+        <img src="planning.png" alt="Task-Manager" class="logo">
+        <div>
+            <label>Nombres</label>
+            <input type="text" formControlName="name">
+        </div>
+
+        <div>
+            <label>Apellidos</label>
+            <input type="text" formControlName="lastName">
+        </div>
+
+        <div>
+            <label>Email:</label>
+            <input type="email" formControlName="email">
+            <div *ngIf="registForm.get('email')?.hasError('email')">
+            Email no válido.
+            </div>
+        </div>
+
+        <div>
+            <label>Contraseña:</label>
+            <input type="password" formControlName="password">
+        </div>
+
+        <button type="submit" [disabled]="!registForm.valid">Registrarse</button>
+        <a routerLink="/">Tienes una cuenta?</a>
+    </form>
+</div>
