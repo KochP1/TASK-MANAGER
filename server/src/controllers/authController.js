@@ -35,7 +35,7 @@ const login = async (req, res) => {
         await authService.saveRefreshToken(user.id, refreshToken);
 
 
-        res.json({ accessToken, refreshToken });
+        res.json({ accessToken, refreshToken, user });
     } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Error en el servidor' });
