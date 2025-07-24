@@ -1,8 +1,8 @@
-<nav class="navbar">
+<nav class="navbar" *ngIf="userData">
 
-    <h1>Hola, Juan Koch</h1>
+    <h1>{{ userData.name }} {{ userData.lastName }}</h1>
 
     <div class="user-icon__container">
-        <span>J</span>
+        <span>{{ userData.name[0] }}</span>
     </div>
 </nav>

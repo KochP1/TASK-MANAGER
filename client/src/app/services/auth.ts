@@ -14,6 +14,7 @@ interface User {
 interface AuthResponse {
   accessToken?: string;
   user?: User;
+  error?: string;
 }
 
 @Injectable({

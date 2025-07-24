@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../services/auth';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-regist',
@@ -17,7 +16,7 @@ export class Regist {
   isLoading = false;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private authService: Auth, private router: Router, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
     this.registForm = this.fb.group({
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -36,7 +35,6 @@ export class Regist {
       this.authService.register(this.registForm.value).subscribe({
           next: (response) => {
             console.log('Registro exitoso', response);
-            this.toastr.success('Usuario creado');
             this.router.navigate(['/']);
           },
           error: (err) => {

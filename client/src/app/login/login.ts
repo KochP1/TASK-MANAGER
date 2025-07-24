@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../services/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,8 @@ export class Login {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
+
+  private snackBar = inject(MatSnackBar);
 
     constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
     this.loginForm = this.fb.group({
@@ -33,7 +36,8 @@ export class Login {
         },
         error: (err) => {
           this.errorMessage = err.message || 'Error al iniciar sesion';
-          this.isLoading = false
+          this.isLoading = false;
+          this.snackBar.open('Credenciales invalidas', 'X')
         },
         complete: () => {
           this.isLoading = false;
