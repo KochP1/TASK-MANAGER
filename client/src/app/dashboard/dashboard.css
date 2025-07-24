@@ -1,0 +1,27 @@
+.dashboard__wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f5f5; /* Color de fondo opcional */
+}
+
+.sidebar {
+  width: 250px; /* Ancho fijo */
+  flex-shrink: 0; /* Evita que se encoja */
+  background-color: #2c3e50; /* Color de la sidebar */
+  height: 100vh; /* Ocupa el 100% del alto */
+  overflow-y: auto; /* Scroll si el contenido excede el alto */
+}
+
+.main-content {
+  flex-grow: 1; /* Ocupa todo el espacio restante */
+  display: flex;
+  flex-direction: column; /* Apila navbar y contenido verticalmente */
+  min-height: 100vh; /* Asegura que cubra todo el alto */
+}
+
+.content {
+  flex-grow: 1; /* El contenido ocupa el espacio restante */
+  padding: 20px; /* Espaciado interno */
+  overflow-y: auto; /* Scroll para el contenido */
+}

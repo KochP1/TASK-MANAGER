@@ -1,0 +1,49 @@
+.side-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 200px;
+    height: 100%;
+    background-color: #2e46ba;
+}
+
+.side-list {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    list-style: none;
+    font-size: 1.8rem;
+    padding: 0;
+    margin-top: 50px;
+}
+
+.side-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.side-item a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+}
+
+.side-item a:hover {
+    text-decoration: underline;
+}
+
+.logo-link {
+    margin-top: 30px;
+}
+
+.dashboard__logo {
+    width: 100px;
+    height: 100px;
+}
+
+.dashboard__logo:hover {
+    cursor: pointer;
+}
