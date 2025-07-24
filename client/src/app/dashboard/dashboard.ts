@@ -11,5 +11,5 @@ import { Content } from '../content/content';
   styleUrl: './dashboard.css'
 })
 export class Dashboard {
-
+  
 }

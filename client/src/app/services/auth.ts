@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError, tap } from 'rxjs';
 import { environment } from '../environments/enviroment';
+import { Router } from '@angular/router';
 
 interface User {
   name: string;
@@ -23,7 +24,7 @@ export class Auth {
   private tokenKey = 'auth_token';
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   register(userData: {
     name: string;
@@ -42,6 +43,38 @@ export class Auth {
       tap(response => this.handleAuth(response)),
       catchError(this.handleError)
     )
+  }
+
+  logout(): Observable<any> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.cleanUpAndRedirect();
+      return throwError(() => new Error('No hay token almacenado'));
+    }
+
+    return this.http.post(`${this.apiUrl}/logout`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
+      tap(() => {
+        this.cleanUpAndRedirect();
+      }),
+      catchError(error => {
+        this.cleanUpAndRedirect();
+        return throwError(() => error);
+      })
+    );
+  }
+
+    private cleanUpAndRedirect(): void {
+      localStorage.removeItem(this.tokenKey);
+      localStorage.removeItem('user');
+      
+      this.router.navigate(['/']);
+
+      // window.location.reload();
   }
 
   private handleAuth(response: AuthResponse): void {
@@ -68,12 +101,12 @@ export class Auth {
       return throwError(() => new Error(errorMessage));
   }
 
-   // Verificar si el usuario está autenticado
+
   isAuthenticated(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }
 
-  // Obtener token almacenado
+
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
