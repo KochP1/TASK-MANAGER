@@ -33,5 +33,10 @@ export const routes: Routes = [
             path: 'edit_users/:id',
             loadComponent: () => import('./dashboard/edit-user/edit-user').then((m => m.EditUser) )
         },
+
+        {
+            path: 'settings',
+            loadComponent: () => import('./dashboard/settings/settings').then((m => m.Settings) )
+        }
     ]}
 ];
