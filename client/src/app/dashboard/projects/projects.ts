@@ -86,11 +86,6 @@ export class Projects implements OnInit{
   }
 
   onSubmit(): void {
-      console.log('Form submitted', this.projectForm.value);
-    console.log('Form valid:', this.projectForm.valid);
-    console.log('Form errors:', this.projectForm.errors);
-    console.log('Name errors:', this.projectForm.get('name')?.errors);
-    console.log('Description errors:', this.projectForm.get('description')?.errors);
     if (this.projectForm.valid) {
       this.isLoading.set(true);
       this.error.set(null);
