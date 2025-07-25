@@ -19,7 +19,7 @@
                     <label for="">Nombre</label>
                     <input type="text" formControlName="name">
                      <div *ngIf="projectForm.get('name')?.errors?.['required'] && projectForm.get('name')?.touched">
-                        Name is required
+                        El campo es requerido
                     </div>
                     <div *ngIf="projectForm.get('name')?.errors?.['minlength']" class="error">
                         El campo no puede estar vacio
@@ -33,6 +33,9 @@
                     <label for="">Descrpción</label>
                     <textarea name="description" formControlName="description"></textarea>
 
+                    <div *ngIf="projectForm.get('description')?.errors?.['required'] && projectForm.get('description')?.touched">
+                        El campo es requerido
+                    </div>
                     <div *ngIf="projectForm.get('description')?.errors?.['minlength']" class="error">
                         El campo no puede estar vacio
                     </div>
@@ -51,8 +54,8 @@
         <small>Creado el: {{ project.createdAt | date }}</small>
         <div class="projects-btns__container">
             <button class="project-btn" (click)="delete(project.id)">Eliminar</button>
-            <button class="project-btn">
-                <a href="#">Editar</a>
+            <button class="project-btn" (click)="editProject(project.id)">
+                Editar
             </button>
         </div>
         </div>

@@ -5,7 +5,7 @@ import { environment } from '../environments/enviroment';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-interface User {
+export interface User {
   id: number;
   name: string;
   lastName: string;
@@ -170,4 +170,90 @@ export class Auth {
   getUser(): string | null {
     return localStorage.getItem('user');
   }
+
+  getUserById(id: number): Observable<User> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<User>(`${this.apiUrl}/get_user/${id}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
+  updateUser(id: number, userData: Partial<User>): Observable<User> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<User>(`${this.apiUrl}/update_user/${id}`, userData, { headers }).pipe(
+      tap(updatedUser => {
+        // Si el usuario actualizado es el mismo que está logueado, actualiza los datos en localStorage
+        const currentUser = JSON.parse(this.getUser() || '{}');
+        if (currentUser.id === updatedUser.id) {
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+
+  deleteUser(id: number): Observable<{ message: string }> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/delete_user/${id}`, { headers }).pipe(
+      tap(() => {
+        // Si el usuario eliminado es el mismo que está logueado, hacer logout
+        const currentUser = JSON.parse(this.getUser() || '{}');
+        if (currentUser.id === id) {
+          this.logout().subscribe();
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  listUsers(): Observable<User[]> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<User[]>(`${this.apiUrl}/list_users`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

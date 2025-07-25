@@ -10,7 +10,7 @@ export interface ProjectsInterface {
   name: string,
   description: string,
   admin_id: number
-  createdAt: string
+  createdAt?: string
 }
 
 interface ProjectResponse {
@@ -102,5 +102,43 @@ export class ProjectService {
       console.error('Error parsing user data:', parseError);
       return throwError(() => new Error('Datos de usuario corruptos'));
     }
+  }
+
+    getProject(id: number): Observable<ProjectsInterface> {
+    const token = this.authService.getToken();
+
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+
+    }
+
+    try {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      return this.http.get<ProjectsInterface>(
+        `${this.apiUrl}/get_one_project/${id}`,
+        { headers }
+      ).pipe(
+        catchError(error => {
+          console.error('Error fetching projects:', error);
+          return throwError(() => error);
+        })
+      );
+    } catch(parseError) {
+      console.error('Error parsing user data:', parseError);
+      return throwError(() => new Error('Datos de usuario corruptos'));
+    }
+  }
+
+
+  updateProject(id: number, projectData: any) {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put(`${this.apiUrl}/edit_project/${id}`, projectData, { headers });
   }
 }

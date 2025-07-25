@@ -18,5 +18,15 @@ export const routes: Routes = [
             path: 'acerca_de',
             loadComponent: () => import('./dashboard/acerca-de/acerca-de').then((m => m.AcercaDe) )
         },
+
+        {
+            path: 'edit_project/:id',
+            loadComponent: () => import('./dashboard/edit-project/edit-project').then((m => m.EditProject) )
+        },
+
+        {
+            path: 'users',
+            loadComponent: () => import('./dashboard/users/users').then((m => m.Users) )
+        },
     ]}
 ];

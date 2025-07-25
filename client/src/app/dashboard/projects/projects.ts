@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProjectService, ProjectsInterface } from '../../services/projectServices/project';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
@@ -22,7 +22,7 @@ export class Projects implements OnInit{
   error = signal<string | null>(null);
   private snackBar = inject(MatSnackBar);
 
-  constructor(private projectService: ProjectService, private fb: FormBuilder) {
+  constructor(private projectService: ProjectService, private router: Router, private fb: FormBuilder) {
     this.projectForm = this.fb.group({
       name: ['', [
         Validators.required, 
@@ -49,7 +49,7 @@ export class Projects implements OnInit{
   }
   }
 
-    private loadUser(): void {
+  private loadUser(): void {
     const user = localStorage.getItem('user');
 
     if (user) {
@@ -114,6 +114,10 @@ export class Projects implements OnInit{
       }
     )
     }
+  }
+
+  editProject(projectId: number) {
+    this.router.navigate(['/dashboard/edit_project', projectId]);
   }
 
   delete(id: number): void {

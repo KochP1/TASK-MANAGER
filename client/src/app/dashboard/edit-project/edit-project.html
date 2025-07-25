@@ -1,0 +1,34 @@
+<div class="create-project__container">
+    <form class="create-project__form" *ngIf="project() && !isLoading()" [formGroup]="projectEditForm" (ngSubmit)="onSubmit()">
+        <div class="form-control">
+            <label for="">Nombre</label>
+            <input type="text" formControlName="name" [value]="project()?.name">
+                <div *ngIf="projectEditForm.get('name')?.errors?.['required'] && projectEditForm.get('name')?.touched" class="error">
+                    El campo es requerido
+                </div>
+                <div *ngIf="projectEditForm.get('name')?.errors?.['minlength']" class="error">
+                    El campo no puede estar vacio
+                </div>
+                <div *ngIf="projectEditForm.get('name')?.errors?.['maxlength']" class="error">
+                    Máximo 20 caractéres
+                </div>
+        </div>
+
+            <div class="form-control">
+                <label for="">Descrpción</label>
+                <textarea name="description" formControlName="description" [value]="project()?.description"></textarea>
+
+                <div *ngIf="projectEditForm.get('description')?.errors?.['required'] && projectEditForm.get('description')?.touched" class="error">
+                    El campo es requerido
+                </div>
+                <div *ngIf="projectEditForm.get('description')?.errors?.['minlength']" class="error">
+                    El campo no puede estar vacio
+                </div>
+                <div *ngIf="projectEditForm.get('description')?.errors?.['maxlength']" class="error">
+                    Máximo 90 caractéres
+                </div>
+            </div>
+
+            <button class="btn-create-project" type="submit">Actualizar</button>
+    </form>
+</div>
