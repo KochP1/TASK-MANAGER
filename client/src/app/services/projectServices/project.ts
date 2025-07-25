@@ -27,6 +27,48 @@ export class ProjectService {
   private apiUrl = `${environment.apiBaseUrl}/admin`;
 
   constructor(private http: HttpClient, private router: Router, private authService: Auth) {}
+
+  createProject(projectData: {
+    name: string,
+    description: string,
+    admin_id: number
+  }) {
+    const token = this.authService.getToken();
+
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+    return this.http.post(`${this.apiUrl}/create_project`, projectData, { headers }).pipe(
+      catchError(error => {
+        console.error('Error creating project:', error);
+        return throwError(() => error);
+      })
+    )
+  }
+
+  deleteProject(id:number) {
+    const token = this.authService.getToken();
+
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/delete_project/${id}`, { headers }).pipe(
+      catchError(error => {
+        console.error('Error creating project:', error);
+        return throwError(() => error);
+      })
+    )
+  }
   
   getProjects(): Observable<ProjectsInterface[]> {
     const token = this.authService.getToken();
@@ -44,8 +86,6 @@ export class ProjectService {
         'Authorization': `Bearer ${token}`
       });
 
-      console.log(user.id)
-      console.log(`${this.apiUrl}/get_project/${user.id}`)
       return this.http.get<ProjectsInterface[]>(
         `${this.apiUrl}/get_project/${user.id}`,
         { headers }
@@ -60,8 +100,6 @@ export class ProjectService {
       );
     } catch(parseError) {
       console.error('Error parsing user data:', parseError);
-      //this.authService.logout();
-      //this.router.navigate(['/']);
       return throwError(() => new Error('Datos de usuario corruptos'));
     }
   }

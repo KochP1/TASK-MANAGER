@@ -17,6 +17,6 @@ export const routes: Routes = [
         {
             path: 'acerca_de',
             loadComponent: () => import('./dashboard/acerca-de/acerca-de').then((m => m.AcercaDe) )
-        }
+        },
     ]}
 ];

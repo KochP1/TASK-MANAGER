@@ -51,24 +51,37 @@
     padding: 2rem;
 }
 
-.create-link {
-    text-decoration: none;
-    color: white;
-    border-radius: 7px;
-    box-shadow: 0px 0px 5px 0px #333;
-    background-color: #02c980;
-    width: 200px;
-    height: 40px;
-    display: block;
-    font-size: 1.4rem;
-    font-weight: 600;
+.create-project__container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.create-link:hover {
-    background-color: #05774d;
+.create-project__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0px 0px 5px 0px #333;
+    border-radius: 7px;
+    padding: 30px;
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 1.4rem;
+}
+
+.btn-create-project {
+    border: 0;
+    box-shadow: 0px 0px 5px 0px #333;
+    background-color: #02c980;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .projects-btns__container {
@@ -110,4 +123,8 @@
 
 .project-btn:nth-child(2) {
     background-color: #0d6efd;
+}
+
+.error {
+    color: red;
 }

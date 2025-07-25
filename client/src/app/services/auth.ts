@@ -110,6 +110,7 @@ export class Auth {
     private cleanUpAndRedirect(): void {
       localStorage.removeItem(this.tokenKey);
       localStorage.removeItem('user');
+      localStorage.removeItem('refreshToken');
       
       this.router.navigate(['/']);
 
