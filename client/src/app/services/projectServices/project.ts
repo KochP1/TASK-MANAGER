@@ -53,18 +53,15 @@ export class ProjectService {
         catchError(error => {
           console.error('Error fetching projects:', error);
 
-          if (error.status === 401) {
-            this.authService.logout();
-            this.router.navigate(['/login']);
-          }
+          
 
           return throwError(() => error);
         })
       );
     } catch(parseError) {
       console.error('Error parsing user data:', parseError);
-      this.authService.logout();
-      this.router.navigate(['/login']);
+      //this.authService.logout();
+      //this.router.navigate(['/']);
       return throwError(() => new Error('Datos de usuario corruptos'));
     }
   }

@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, throwError, tap } from 'rxjs';
 import { environment } from '../environments/enviroment';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 interface User {
   id: number;
@@ -14,8 +15,13 @@ interface User {
 
 interface AuthResponse {
   accessToken?: string;
+  refreshToken?: string;
   user?: User;
   error?: string;
+}
+
+interface RefreshResponse {
+  accessToken?: string
 }
 
 @Injectable({
@@ -24,9 +30,19 @@ interface AuthResponse {
 export class Auth {
   private apiUrl = `${environment.apiBaseUrl}/auth`;
   private tokenKey = 'auth_token';
+  private jwtHelper = new JwtHelperService();
 
 
   constructor(private http: HttpClient, private router: Router) {}
+
+  private tokenExpired = signal(false);
+  
+  // Expone el estado como señal (readonly)
+  isTokenExpired = this.tokenExpired.asReadonly();
+
+  setTokenExpired(expired: boolean): void {
+    this.tokenExpired.set(expired);
+  }
 
   register(userData: {
     name: string;
@@ -45,6 +61,27 @@ export class Auth {
       tap(response => this.handleAuth(response)),
       catchError(this.handleError)
     )
+  }
+
+  refreshToken() {
+    const refresh = this.getRefreshToken();
+
+    if (!refresh) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    };
+
+    try {
+      return this.http.post(`${this.apiUrl}/refresh`, refresh).pipe(
+        tap(response => this.handleRefresh(response)),
+        catchError(this.handleError)
+      )
+    } catch(parseError) {
+      console.error('Error parsing user data:', parseError);
+      this.logout();
+      this.router.navigate(['/']);
+      return throwError(() => new Error('Datos de usuario corruptos'));
+    }
   }
 
   logout(): Observable<any> {
@@ -87,6 +124,18 @@ export class Auth {
     if (response.user) {
       localStorage.setItem('user', JSON.stringify(response.user))
     }
+
+    if (response.refreshToken) {
+      localStorage.setItem('refreshToken', JSON.stringify(response.refreshToken));
+    }
+  }
+
+  private handleRefresh(response: RefreshResponse): void {
+    localStorage.removeItem(this.tokenKey);
+
+    if (response.accessToken) {
+      localStorage.setItem(this.tokenKey, response.accessToken);
+    }
   }
 
     // Manejo centralizado de errores
@@ -111,6 +160,10 @@ export class Auth {
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
   getUser(): string | null {

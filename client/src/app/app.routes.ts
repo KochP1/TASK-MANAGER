@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Login } from './login/login';
 import { Regist } from './regist/regist';
 import { Dashboard } from './dashboard/dashboard';
+import { authGuard } from './guards/auth.guards';
 
 export const routes: Routes = [
     {path: '', component: Login},
