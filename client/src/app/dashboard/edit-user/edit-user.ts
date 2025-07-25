@@ -108,11 +108,4 @@ export class EditUser {
       panelClass: ['error-snackbar']
     });
   }
-
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
-  }
 }

@@ -214,6 +214,24 @@ export class Auth {
     );
   }
 
+  updatePassword(id: number, userData: {currentPassword: string, newPassword: string}): Observable<User> {
+    const token = this.getToken();
+    
+    if (!token) {
+      this.router.navigate(['/']);
+      return throwError(() => new Error('No autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.patch<User>(`${this.apiUrl}/update_password/${id}`, userData, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   deleteUser(id: number): Observable<{ message: string }> {
     const token = this.getToken();
