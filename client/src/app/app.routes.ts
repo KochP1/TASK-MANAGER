@@ -11,6 +11,11 @@ export const routes: Routes = [
         {
             path: '',
             loadComponent: () => import('./dashboard/projects/projects').then((m => m.Projects) )
+        },
+
+        {
+            path: 'acerca_de',
+            loadComponent: () => import('./dashboard/acerca-de/acerca-de').then((m => m.AcercaDe) )
         }
     ]}
 ];

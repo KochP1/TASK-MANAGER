@@ -1,1 +1,26 @@
-<p>projects works!</p>
+<section class="projects-container">
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading()" class="loading-spinner">
+        Cargando proyectos...
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error()" class="error-message">
+        {{ error() }}
+    </div>
+
+    <!-- Lista de proyectos -->
+    <div *ngIf="projects() && !isLoading()">
+        <h2>Mis Proyectos</h2>
+        
+        <div *ngFor="let project of projects()" class="project-card">
+        <h3>{{ project.name }}</h3>
+        <p>{{ project.description }}</p>
+        <small>Creado el: {{ project.createdAt | date }}</small>
+        </div>
+
+        <div *ngIf="projects()?.length === 0" class="empty-state">
+            No tienes proyectos creados aún.
+        </div>
+    </div>
+</section>

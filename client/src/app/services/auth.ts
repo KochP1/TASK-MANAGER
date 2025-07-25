@@ -5,6 +5,7 @@ import { environment } from '../environments/enviroment';
 import { Router } from '@angular/router';
 
 interface User {
+  id: number;
   name: string;
   lastName: string;
   email: string;
@@ -110,5 +111,9 @@ export class Auth {
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getUser(): string | null {
+    return localStorage.getItem('user');
   }
 }

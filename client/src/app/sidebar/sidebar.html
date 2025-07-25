@@ -6,7 +6,7 @@
     <ul class="side-list">
         <li class="side-item">
             <i class="fa-solid fa-diagram-project"></i>
-            <a href="">Proyectos</a>
+            <a routerLink="/dashboard/">Proyectos</a>
         </li>
         <li class="side-item">
             <i class="fa-solid fa-users"></i>
@@ -14,7 +14,7 @@
         </li>
         <li class="side-item">
             <i class="fa-solid fa-circle-info"></i>
-            <a href="">Acerca de</a>
+            <a routerLink="/dashboard/acerca_de">Acerca de</a>
         </li>
         <li class="side-item">
             <i class="fa-solid fa-gear"></i>
@@ -22,7 +22,7 @@
         </li>
         <li class="side-item">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <a (click)="logout(); $event.preventDefault()">Salir</a>
+            <a class="logout-link" (click)="logout(); $event.preventDefault()">Salir</a>
         </li>
     </ul>
 </nav>

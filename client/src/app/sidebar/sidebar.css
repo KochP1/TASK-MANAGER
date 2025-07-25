@@ -39,6 +39,10 @@
     margin-top: 30px;
 }
 
+.logout-link {
+    cursor: pointer;
+}
+
 .dashboard__logo {
     width: 100px;
     height: 100px;
