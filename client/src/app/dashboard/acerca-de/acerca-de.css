@@ -1,19 +1,14 @@
 .logo-acercaDe {
-    width: 400px;
-    height: 400px;
-    background: url('planning.png');
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 5px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    margin: auto;
 }
 
 .acerca__wrapper {
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 400px;
 }
 
 .acerca-info__wrapper {
