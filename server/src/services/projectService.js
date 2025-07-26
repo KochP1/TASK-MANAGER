@@ -72,7 +72,7 @@ class ProjectService {
             throw new Error('userId es requerido');
         }
 
-        const [results] = await sequelize.query(`
+        const results = await sequelize.query(`
             SELECT 
                 p.id,
                 p.name,

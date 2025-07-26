@@ -19,7 +19,7 @@ router.delete('/delete_project/:id', authenticate, checkRole('admin') , deletePr
 
 // tasks
 router.get('/get_task_id/:id', authenticate, checkRole('admin'), getTask);
-router.get('/get_task/:id', authenticate, checkRole('admin'), getTasks);
+router.get('/get_task/:id', authenticate, checkRole(['admin', 'user']), getTasks);
 router.post('/create_task', authenticate, checkRole('admin'), createTask);
 router.put('/edit_task/:id', authenticate, checkRole('admin'), editTask);
 router.delete('/delete_task/:id', authenticate, checkRole('admin'), deleteTask);
