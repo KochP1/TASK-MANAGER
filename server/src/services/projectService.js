@@ -1,5 +1,6 @@
 const Project = require('../models/projects');
 const UserProjects = require('../models/user-projects');
+const sequelize = require('../config/db');
 
 class ProjectService {
     async create(name, description, adminId) {
@@ -64,6 +65,35 @@ class ProjectService {
 
     async getAll() {
         return await Project.findAll();
+    }
+
+    async getProjectsByUser(userId) {
+        if (!userId) {
+            throw new Error('userId es requerido');
+        }
+
+        const [results] = await sequelize.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.description,
+                p.admin_id,
+                p.created_at,
+                up.assigned_at
+            FROM 
+                user_projects up
+            JOIN 
+                projects p ON up.project_id = p.id
+            WHERE 
+                up.user_id = :userId
+            ORDER BY 
+                up.assigned_at DESC
+        `, {
+            replacements: { userId },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        return results;
     }
 }
 
