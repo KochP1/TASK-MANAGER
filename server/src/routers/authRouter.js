@@ -4,7 +4,11 @@ const { register, login, logout, delete_user, update_user, list_users, get_user_
 const authenticate = require('../middleware/authMiddleware')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
+<<<<<<< HEAD
 router.get('/list_users', authenticate, checkRole('admin'), list_users)
+=======
+router.get('/list_users', authenticate, checkRole(['admin', 'user']), list_users)
+>>>>>>> main
 router.get('/get_user/:id', authenticate, checkRole(['admin', 'user']), get_user_by_id)
 router.post('/register', register);
 router.post('/login', login);

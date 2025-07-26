@@ -61,6 +61,49 @@ const getProjectById = async (req, res) => {
     }
 }
 
+const getAllProjects = async (req, res) => {
+    try {
+
+        const project = await projectService.getAll();
+
+        if (!project) {
+            res.status(404).json({error: 'No hay proyectos'});
+        }
+
+        res.json(project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error al buscar proyecto'});
+    }
+}
+
+const getProjectsByUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        
+        if (!userId) {
+            return res.status(400).json({ error: 'ID de usuario es requerido' });
+        }
+
+        const userProjects = await projectService.getProjectsByUser(userId);
+        
+        if (!userProjects || userProjects.length === 0) {
+            return res.status(404).json({ 
+                error: 'No se encontraron proyectos asignados a este usuario',
+                code: 'NO_PROJECTS_FOUND'
+            });
+        }
+
+        res.json(userProjects);
+    } catch (err) {
+        console.error('Error en getProjectsByUser:', err);
+        res.status(500).json({ 
+            error: 'Error al obtener proyectos del usuario',
+            details: err.message 
+        });
+    }
+};
+
 // POST project
 
 const createProject = async (req, res) => {
@@ -243,4 +286,5 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress, assign_project, update_assign_project, getProjectById, getTasks, getTask }
+
+module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress, assign_project, update_assign_project, getProjectById, getTasks, getTask, getAllProjects, getProjectsByUser}
