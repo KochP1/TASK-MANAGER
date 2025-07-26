@@ -52,6 +52,13 @@ class TaskService {
             order: [['due_date', 'DESC']]
         });
     }
+
+    async getByProject(project_id) {
+        return await Task.findAll({
+            where: {project_id: project_id},
+            order: [['due_date', 'DESC']]
+        });
+    }
 }
 
 module.exports = TaskService;

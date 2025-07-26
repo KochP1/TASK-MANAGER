@@ -150,6 +150,40 @@ const getTasksByProject = async (req, res) => {
     }
 }
 
+const getTasks = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const tasks = await taskService.getByProject(id)
+
+        if (!tasks) {
+            res.status(404).json({error: 'No hay tareas'});
+        }
+
+        res.json(tasks);
+    } catch (err) {
+        console.error(error);
+        res.status(500).json({error: 'Error al buscar tareas'});
+    }
+}
+
+const getTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const task = await taskService.getById(id)
+
+        if (!task) {
+            res.status(404).json({error: 'No hay tareas'});
+        }
+
+        res.json(task);
+    } catch (err) {
+        console.error(error);
+        res.status(500).json({error: 'Error al buscar tareas'});
+    }
+}
+
 // POST TASK
 
 const createTask = async (req, res) => {
@@ -209,4 +243,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress, assign_project, update_assign_project, getProjectById}
+module.exports = { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, getTasksByProject, editTaskProgress, assign_project, update_assign_project, getProjectById, getTasks, getTask }
