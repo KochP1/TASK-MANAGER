@@ -61,6 +61,10 @@ class ProjectService {
             where: { admin_id: adminId, name: projectName},
         });
     }
+
+    async getAll() {
+        return await Project.findAll();
+    }
 }
 
 module.exports = ProjectService;
