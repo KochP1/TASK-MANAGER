@@ -5,7 +5,7 @@ const authenticate = require('../middleware/authMiddleware')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
 router.get('/list_users', authenticate, checkRole('admin'), list_users)
-router.get('/get_user/:id', authenticate, checkRole('admin'), get_user_by_id)
+router.get('/get_user/:id', authenticate, checkRole(['admin', 'user']), get_user_by_id)
 router.post('/register', register);
 router.post('/login', login);
 router.post('/refresh', refreshAccessToken)
