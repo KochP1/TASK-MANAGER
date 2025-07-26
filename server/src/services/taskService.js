@@ -25,10 +25,6 @@ class TaskService {
     }
 
     async updateProgress(id, newProgress) {
-        const validStatuses = ['pending', 'in_progress', 'completed'];
-        if (!validStatuses.includes(newProgress)) {
-            throw new Error(`Estado inválido. Usar: ${validStatuses.join(', ')}`);
-        }
 
         const task = await Task.findByPk(id);
         return await task.update(newProgress)
