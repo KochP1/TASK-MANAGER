@@ -17,6 +17,8 @@ router.put('/edit_project/:id', authenticate, checkRole('admin') , editProject);
 router.delete('/delete_project/:id', authenticate, checkRole('admin') , deleteProject);
 
 // tasks
+router.get('/get_task_id/:id', authenticate, checkRole('admin'), getTask);
+router.get('/get_task/:id', authenticate, checkRole('admin'), getTasks);
 router.post('/create_task', authenticate, checkRole('admin'), createTask);
 router.put('/edit_task/:id', authenticate, checkRole('admin'), editTask);
 router.delete('/delete_task/:id', authenticate, checkRole('admin'), deleteTask);
