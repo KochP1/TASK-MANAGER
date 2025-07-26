@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, assign_project, update_assign_project, getProjectById } = require('../controllers/projectsController');
+const { createProject, createTask, deleteProject, deleteTask, editProject, editTask, getProject, getOneProject, assign_project, update_assign_project, getProjectById, getTask, getTasks } = require('../controllers/projectsController');
 const authenticate = require('../middleware/authMiddleware')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
